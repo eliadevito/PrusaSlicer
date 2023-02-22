@@ -14,7 +14,7 @@ endif()
 
 prusaslicer_add_cmake_project(wxWidgets
     URL https://github.com/eliadevito/wxWidgets/archive/110d1d6bb07b38bd7f85bbb57ccd758061cf2a86.zip
-    URL_HASH SHA256=110d1d6bb07b38bd7f85bbb57ccd758061cf2a86
+    URL_HASH SHA256=5d864828daf1b444de2be60b2c2f67f59d477a3c2d60ab7bdf336ee7a68705cf
     DEPENDS ${PNG_PKG} ${ZLIB_PKG} ${EXPAT_PKG} dep_TIFF dep_JPEG dep_NanoSVG
     CMAKE_ARGS
         -DwxBUILD_PRECOMP=ON
