@@ -30,6 +30,25 @@
 #include <boost/algorithm/hex.hpp>
 #endif
 
+#if defined(__linux__) && !defined(SLIC3R_DESKTOP_INTEGRATION)
+#include <boost/process/system.hpp>
+#include <boost/process/io.hpp>
+
+namespace {
+    std::string get_xdg_download_dir() {
+        boost::process::ipstream os;
+        boost::process::system("xdg-user-dir DOWNLOAD", boost::process::std_out > os);
+
+        std::string download_path;
+
+        if (std::getline(os, download_path))
+            return download_path;
+
+        return "";
+    }
+}
+#endif //defined(__linux__) && !defined(SLIC3R_DESKTOP_INTEGRATION)
+
 namespace Slic3r {
 
 static const std::string VENDOR_PREFIX = "vendor:";
@@ -176,6 +195,13 @@ void AppConfig::set_defaults()
 
         if (get("clear_undo_redo_stack_on_new_project").empty())
             set("clear_undo_redo_stack_on_new_project", "1");
+
+#if defined(__linux__) && !defined(SLIC3R_DESKTOP_INTEGRATION)
+        std::string download_path = get_xdg_download_dir();
+
+        if (!download_path.empty())
+            set("url_downloader_dest", download_path);
+#endif //defined(__linux__) && !defined(SLIC3R_DESKTOP_INTEGRATION)
     }
     else {
 #ifdef _WIN32
